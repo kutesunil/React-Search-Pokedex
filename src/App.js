@@ -6,8 +6,8 @@ class App extends Component {
   constructor (props) {
     super(props);
     this.state = ({
-      isSearch: false,
-      search: 'sunil'
+      search: '',
+      searchData: ''
     });
   }
   static defaultProps = Pokedex;
@@ -28,9 +28,18 @@ class App extends Component {
       }
     }
     console.log(searchArray);
-    // (this.state.search.length > 0) ? this.props.pokemon = searchArray : this.setState({ search: '' });
+    this.setState({
+      searchData: searchArray,
+      search: search_value,
+    })
   };
 
+  resetHandleClick = () => {
+    this.setState({
+      searchData: '',
+      search: '',
+    })
+  }
 
   render () {
     // console.log(this.props);
@@ -40,16 +49,23 @@ class App extends Component {
           <div className="row">
             <h1 className="text-center"> Search Pokedex</h1>
             <div className="col-sm-6">
-              <input type="text" name="search"  className = 'form-control'  onChange={ this.handleChange }/>
+              <input type="text" name="search"  className = 'form-control'  onChange={ this.handleChange } value = {this.state.search}/>
             </div>
 
             <div className="col-sm-6">
               <button className = 'btn btn-danger' onClick={this.handleClick}> Search </button>
+              <button className = 'btn btn-danger' onClick={this.resetHandleClick} style ={{marginLeft:"15px"}}> Reset </button>
             </div>
           </div>
 
           <div className="row">
             {
+              (this.state.searchData.length !== 0) 
+              ?
+              this.state.searchData.map((item) => {
+                return <Card key={item.id} data={item} />
+              })
+              :
               this.props.pokemon.map((item) => {
                 return <Card key={item.id} data={item} />
               })
